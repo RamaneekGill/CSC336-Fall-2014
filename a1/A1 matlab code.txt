@@ -1,0 +1,58 @@
+
+A)
+
+for i = -25:25
+   
+    format long;
+    n=0;
+    sum=0;
+    oldsum=100;
+    while (abs(sum-oldsum) > 0.0000000000000001)
+      oldsum=sum;
+      sum=sum+i^n/factorial(n);
+      %disp(['Adding up to ',num2str(x)'^(',num2str(n)')/',num2str(n),'! yields ',num2str(sum,20)]);
+      n=n+1;
+    end
+ 
+    y = (sum - exp(i))/exp(i);
+    disp(['Value of x is ', num2str(i), ', relative error is ', num2str(y, 20),'.']);
+end
+
+B)
+
+The more negative the value of x is the less accurate the output of exp1(x) will be. Positive values for x will produce accurate approximations for e^x because there is 0% chance of catastrophic cancellation. For negative values whenever the exponent is odd there is a chance for cancellation to occur.
+
+This is especially true for large negative numbers since their values start to become very small and are catastrophically cancelling each other out every other time (due to the odd exponents). Since they are becoming smaller and smaller we are also starting to lose accuracy because they start to approach machine epsiolon, this implies that the smaller the number the greater it is affected by rounding errors since the percentage of change is large for very small number but small for very large numbers.
+
+Large negative numbers greatly affect the computation of exp1(x) because of catastrophic cancellation. The larger the number the greater the chance (and magnitude) for catastrophic cancellation to occur, this creates a very large relative error because some of the summations are essentially 'missing' from the computation. When the absolute error (which seems very small) is divided by the actual result for exp(x) it creates an incredibly large relative error for large negative numbers of x since exp(x) is incredibly small.
+
+C)
+
+for i = -25:25
+   
+    format long;
+    n=0;
+    sum=0;
+    oldsum=100;
+    
+    if i < 0
+      while (abs(sum-oldsum) > 0.0000000000000001)
+        oldsum=sum;
+        sum = sum + abs(i)^n/factorial(n);
+        n=n+1;
+      end
+      sum = 1/sum;
+
+    else
+      while (abs(sum-oldsum) > 0.0000000000000001)
+        oldsum=sum;
+        sum = sum + i^n/factorial(n);
+        n=n+1;
+      end
+    end
+ 
+    y = (sum - exp(i))/exp(i);
+    disp(['Value of x is ', num2str(i), ', relative error is ', num2str(y, 20),'.']);
+end	
+
+
